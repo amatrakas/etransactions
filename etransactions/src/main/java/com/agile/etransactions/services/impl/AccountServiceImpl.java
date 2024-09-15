@@ -6,6 +6,7 @@ import com.agile.etransactions.enums.CurrencyType;
 import com.agile.etransactions.models.CreateAccountRequestDTO;
 import com.agile.etransactions.models.AccountResponseDTO;
 import com.agile.etransactions.services.AccountService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,13 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Transactional(rollbackOn = Exception.class)
     @Override
-    public AccountResponseDTO createAccount(CreateAccountRequestDTO accountDTO) throws Exception {
+    public AccountResponseDTO createAccount(CreateAccountRequestDTO accountDTO) {
         logger.info("AccountServiceImpl.createAccount Start");
         Account account = new Account();
         AccountResponseDTO responseDTO = new AccountResponseDTO();
         boolean accountAlreadyExists;
-
-        if(accountDTO.getBalance() == null) {
-            throw new Exception("Account balance is null");
-        }
 
         accountAlreadyExists = accountRepository.existsByIban(accountDTO.getIban());
 

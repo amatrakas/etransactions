@@ -7,7 +7,7 @@ public enum CurrencyType {
     GBP("GBP"),
     EUR("EUR");
 
-    private String value;
+    private final String value;
 
     CurrencyType(String value) {
         this.value = value;

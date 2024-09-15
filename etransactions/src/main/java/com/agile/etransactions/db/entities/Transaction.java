@@ -96,13 +96,12 @@ public class Transaction {
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
-                ", sourceAccountId=" + sourceAccountId +
-                ", targetAccountId=" + targetAccountId +
+                ", sourceAccountId='" + sourceAccountId + '\'' +
+                ", targetAccountId='" + targetAccountId + '\'' +
                 ", amount=" + amount +
                 ", currency=" + currency +
                 ", createdAt=" + createdAt +
                 ", account=" + account +
                 '}';
     }
-
 }

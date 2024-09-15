@@ -1,5 +1,6 @@
 package com.agile.etransactions.validators;
 
+import com.agile.etransactions.common.Constants;
 import com.agile.etransactions.enums.CurrencyType;
 import com.agile.etransactions.models.CreateAccountRequestDTO;
 import org.apache.commons.lang3.StringUtils;
@@ -28,9 +29,13 @@ public class AccountValidator implements Validator {
         CreateAccountRequestDTO requestDTO = (CreateAccountRequestDTO) target;
         boolean currencyValid;
 
+        if(requestDTO.getBalance() == null) {
+            errors.reject(Constants.BALANCE, "Account balance is empty or null");
+        }
+
         // Validate iban
         if(StringUtils.isBlank(requestDTO.getIban())) {
-            errors.reject("iban", "Iban is empty or null");
+            errors.reject(Constants.IBAN, "Iban is empty or null");
             return;
         }
 
@@ -38,20 +43,19 @@ public class AccountValidator implements Validator {
         Matcher matcher = pattern.matcher(requestDTO.getIban());
 
         if(!matcher.matches()) {
-            errors.reject("iban", "The provided IBAN is invalid.");
+            errors.reject(Constants.IBAN, "The provided IBAN is invalid.");
             return;
         }
 
         // Validate currency
-
         if(StringUtils.isBlank(requestDTO.getCurrency())) {
-            errors.reject("currency", "Currency should not be null or empty");
+            errors.reject(Constants.CURRENCY, "Currency should not be null or empty");
             return;
         }
 
         currencyValid = CurrencyType.validateCurrency(requestDTO.getCurrency());
         if(!currencyValid) {
-            errors.reject("currency", "Currency type is invalid");
+            errors.reject(Constants.CURRENCY, "Currency type is invalid");
         }
 
         logger.info("AccountValidator.validate End");
